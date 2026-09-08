@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <rect width="100" height="100" rx="28" fill="url(#amber-grad)" />
+  <path d="M54 18L24 54H48L42 82L76 44H50L54 18Z" fill="#030712" stroke="#030712" stroke-width="4" stroke-linejoin="round" />
+  <defs>
+    <linearGradient id="amber-grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d97706" />
+      <stop offset="0.5" stop-color="#f59e0b" />
+      <stop offset="1" stop-color="#fbbf24" />
+    </linearGradient>
+  </defs>
+</svg>
