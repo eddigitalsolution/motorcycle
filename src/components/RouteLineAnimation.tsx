@@ -43,14 +43,15 @@ export const RouteLineAnimation = ({
             <div className="absolute inset-0 bg-white/20 animate-speed-line" />
           </div>
 
-          <div className="flex justify-between items-center text-xs font-mono">
+          <div className="flex justify-between items-center text-[10px] sm:text-xs font-mono overflow-x-auto scrollbar-none gap-1">
             {stages.map((st, idx) => (
               <button
                 key={st.id}
+                id={`stage-step-btn-${st.id}`}
                 onClick={() => onSelectStageIndex(idx)}
-                className={`transition-all duration-300 font-extrabold px-2 py-1 rounded-md ${
+                className={`transition-all duration-300 font-extrabold px-1.5 sm:px-2 py-1 rounded-md cursor-pointer whitespace-nowrap ${
                   idx === currentStageIndex
-                    ? 'text-amber-400 scale-110 bg-amber-500/20 border border-amber-500/40'
+                    ? 'text-amber-400 scale-105 sm:scale-110 bg-amber-500/20 border border-amber-500/40 shadow-sm'
                     : idx < currentStageIndex
                     ? 'text-slate-300'
                     : 'text-slate-600 hover:text-slate-400'
@@ -63,7 +64,7 @@ export const RouteLineAnimation = ({
         </div>
 
         {/* Controls & Speed Metadata */}
-        <div className="flex items-center gap-6 text-xs text-slate-400">
+        <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-6 text-xs text-slate-400">
           <div className="hidden lg:flex items-center gap-2 font-mono">
             <Gauge className="w-4 h-4 text-amber-500" />
             <span>{currentStage.speed}</span>
@@ -71,16 +72,20 @@ export const RouteLineAnimation = ({
 
           <div className="flex items-center gap-2">
             <button
+              id="stage-prev-btn"
               onClick={() => onSelectStageIndex(Math.max(0, currentStageIndex - 1))}
               disabled={currentStageIndex === 0}
-              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white disabled:opacity-30 disabled:hover:text-slate-300 transition-colors"
+              aria-label="Previous Stage"
+              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white disabled:opacity-30 disabled:hover:text-slate-300 transition-colors cursor-pointer"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
+              id="stage-next-btn"
               onClick={() => onSelectStageIndex(Math.min(stages.length - 1, currentStageIndex + 1))}
               disabled={currentStageIndex === stages.length - 1}
-              className="p-2 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 disabled:opacity-30 transition-colors shadow-lg shadow-amber-500/20"
+              aria-label="Next Stage"
+              className="p-2 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 disabled:opacity-30 transition-colors shadow-lg shadow-amber-500/20 cursor-pointer"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

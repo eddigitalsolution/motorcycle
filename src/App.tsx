@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { JOURNEY_STAGES, MOTORCYCLES, ROUTE_PACKAGES } from './data';
 import type { JourneyStage, Motorcycle, RoutePackage } from './types';
 import { Navbar } from './components/Navbar';
@@ -8,14 +8,73 @@ import { FleetCard } from './components/FleetCard';
 import { RoutesSection } from './components/RoutesSection';
 import { SafetySection } from './components/SafetySection';
 import { BookingModal } from './components/BookingModal';
+import { LegalModal, type LegalTab } from './components/LegalModal';
 import { Zap, ChevronRight, Star } from 'lucide-react';
 
 export function App() {
-  const [activeSection, setActiveSection] = useState<string>('fleet');
+  const [activeSection, setActiveSection] = useState<string>(() => {
+    if (typeof window === 'undefined') return 'fleet';
+    const rawHash = window.location.hash.replace('#', '').toLowerCase();
+    return ['fleet', 'routes', 'safety', 'experience'].includes(rawHash) ? rawHash : 'fleet';
+  });
+
+  const isManualScrollRef = useRef<boolean>(false);
+  const scrollLockTimeoutRef = useRef<number | null>(null);
+
+  const handleSectionSelect = (id: string) => {
+    setActiveSection(id);
+    isManualScrollRef.current = true;
+    if (scrollLockTimeoutRef.current) {
+      clearTimeout(scrollLockTimeoutRef.current);
+    }
+    scrollLockTimeoutRef.current = window.setTimeout(() => {
+      isManualScrollRef.current = false;
+    }, 850);
+  };
+
   const [currentStageIndex, setCurrentStageIndex] = useState<number>(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [isBookingOpen, setIsBookingOpen] = useState<boolean>(false);
   const [selectedBike, setSelectedBike] = useState<Motorcycle | null>(null);
+
+  // Derive initial legal state from URL hash slug if present on load
+  const [isLegalOpen, setIsLegalOpen] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    const rawHash = window.location.hash.replace('#', '').toLowerCase();
+    return ['privacy', 'privacy-policy', 'terms', 'terms-of-service', 'safety-standards', 'safety-protocol'].includes(rawHash);
+  });
+
+  const [legalTab, setLegalTab] = useState<LegalTab>(() => {
+    if (typeof window === 'undefined') return 'privacy';
+    const rawHash = window.location.hash.replace('#', '').toLowerCase();
+    if (['terms', 'terms-of-service'].includes(rawHash)) return 'terms';
+    if (['safety-standards', 'safety-protocol'].includes(rawHash)) return 'safety';
+    return 'privacy';
+  });
+
+  const handleOpenLegal = (tab: LegalTab) => {
+    setLegalTab(tab);
+    setIsLegalOpen(true);
+    const slug = tab === 'safety' ? 'safety-standards' : tab;
+    if (window.history.pushState) {
+      window.history.pushState(null, '', `#${slug}`);
+    }
+  };
+
+  const handleCloseLegal = () => {
+    setIsLegalOpen(false);
+    if (window.history.pushState) {
+      window.history.pushState(null, '', window.location.pathname);
+    }
+  };
+
+  const handleLegalTabChange = (tab: LegalTab) => {
+    setLegalTab(tab);
+    const slug = tab === 'safety' ? 'safety-standards' : tab;
+    if (window.history.pushState) {
+      window.history.pushState(null, '', `#${slug}`);
+    }
+  };
 
   const categories = ['All', 'Superbike', 'Adventure', 'Cruiser', 'Naked'];
   const currentStage: JourneyStage = JOURNEY_STAGES[currentStageIndex];
@@ -26,11 +85,29 @@ export function App() {
     ? MOTORCYCLES
     : MOTORCYCLES.filter(b => b.category === selectedCategory);
 
+  // Direct Hash Section Scrolling Handler on Mount
+  useEffect(() => {
+    const rawHash = window.location.hash.replace('#', '').toLowerCase();
+    if (['fleet', 'routes', 'safety', 'experience'].includes(rawHash)) {
+      const timer = setTimeout(() => {
+        const element = document.getElementById(rawHash);
+        if (element) {
+          const headerOffset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   // ScrollSpy observer to automatically update activeSection in Navbar as user scrolls
   useEffect(() => {
     const sectionIds = ['fleet', 'routes', 'safety', 'experience'];
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200;
+      if (isManualScrollRef.current) return;
+      const scrollPosition = window.scrollY + 250;
       for (const id of sectionIds) {
         const element = document.getElementById(id);
         if (element) {
@@ -43,7 +120,7 @@ export function App() {
         }
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -72,7 +149,7 @@ export function App() {
       {/* 1. Header Navigation Bar (navbar-adjustment standards) */}
       <Navbar
         activeSection={activeSection}
-        setActiveSection={setActiveSection}
+        setActiveSection={handleSectionSelect}
         onOpenBookingModal={handleOpenBooking}
       />
 
@@ -93,23 +170,24 @@ export function App() {
 
       {/* 4. Motorcycles Fleet Section */}
       <section id="fleet" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
           <div>
             <span className="text-xs font-bold text-amber-500 uppercase tracking-widest block mb-2">CINEMATIC FLEET</span>
-            <h2 className="font-heading text-4xl sm:text-5xl font-black text-white uppercase tracking-tight">
+            <h2 className="font-heading text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
               THE SUPERBIKE & TOURING LINEUP
             </h2>
           </div>
 
-          {/* Category Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          {/* Category Filter Pills - Flex-wrap to prevent overflow */}
+          <div className="flex flex-wrap items-center gap-2 max-w-full">
             {categories.map((cat) => (
               <button
                 key={cat}
+                id={`category-filter-${cat.toLowerCase()}`}
                 onClick={() => setSelectedCategory(cat)}
-                className={`whitespace-nowrap px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+                className={`whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
                   selectedCategory === cat
-                    ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/25'
+                    ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/25 scale-105'
                     : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-800'
                 }`}
               >
@@ -234,9 +312,27 @@ export function App() {
             © {new Date().getFullYear()} APEX RIDERS MOTORCYCLES. CLOUDFLARE PAGES READY.
           </div>
           <div className="flex gap-6 text-slate-400">
-            <a href="#" className="hover:text-amber-400">Privacy Policy</a>
-            <a href="#" className="hover:text-amber-400">Terms of Service</a>
-            <a href="#" className="hover:text-amber-400">Safety Standards</a>
+            <button 
+              id="privacy-policy-footer-link"
+              onClick={() => handleOpenLegal('privacy')} 
+              className="hover:text-amber-400 transition-colors cursor-pointer"
+            >
+              Privacy Policy
+            </button>
+            <button 
+              id="terms-of-service-footer-link"
+              onClick={() => handleOpenLegal('terms')} 
+              className="hover:text-amber-400 transition-colors cursor-pointer"
+            >
+              Terms of Service
+            </button>
+            <button 
+              id="safety-standards-footer-link"
+              onClick={() => handleOpenLegal('safety')} 
+              className="hover:text-amber-400 transition-colors cursor-pointer"
+            >
+              Safety Standards
+            </button>
           </div>
         </div>
       </footer>
@@ -247,6 +343,14 @@ export function App() {
         onClose={() => setIsBookingOpen(false)}
         selectedBike={selectedBike}
         allBikes={MOTORCYCLES}
+      />
+
+      {/* Legal & Safety Information Modal */}
+      <LegalModal
+        isOpen={isLegalOpen}
+        activeTab={legalTab}
+        onClose={handleCloseLegal}
+        onTabChange={handleLegalTabChange}
       />
     </div>
   );

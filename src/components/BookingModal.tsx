@@ -39,6 +39,22 @@ export const BookingModal = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSuccess(true);
+
+    const message = `*APEX RIDERS MOTORCYCLE RESERVATION*\n` +
+      `----------------------------------\n` +
+      `*Customer Name:* ${formData.name || 'Rider'}\n` +
+      `*Email:* ${formData.email || 'N/A'}\n` +
+      `*Phone:* ${formData.phone || 'N/A'}\n\n` +
+      `*Machine:* ${bikeToBook.brand} ${bikeToBook.name} (${bikeToBook.engineCc} cc)\n` +
+      `*Pickup Date:* ${startDate}\n` +
+      `*Duration:* ${days} Day(s)\n` +
+      `*Insurance Shield:* ${insurance.toUpperCase()}\n\n` +
+      `*Total Payment:* RM ${subtotal} MYR\n` +
+      `----------------------------------\n` +
+      `Please confirm my reservation & pickup instructions!`;
+
+    const whatsappUrl = `https://wa.me/601130719502?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -79,12 +95,25 @@ export const BookingModal = ({
                 <span className="text-white font-bold">RM {subtotal} MYR</span>
               </div>
             </div>
-            <button
-              onClick={() => { setIsSuccess(false); onClose(); }}
-              className="px-8 py-3 rounded-full bg-amber-500 text-slate-950 font-bold text-xs tracking-wider hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/20"
-            >
-              DONE & RETURN TO HOMEPAGE
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <a
+                href={`https://wa.me/601130719502?text=${encodeURIComponent(
+                  `*APEX RIDERS MOTORCYCLES*\n------------------\n*Customer:* ${formData.name || 'Rider'}\n*Bike:* ${bikeToBook.brand} ${bikeToBook.name}\n*Date:* ${startDate} (${days} Days)\n*Total:* RM ${subtotal} MYR`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold text-xs tracking-wider transition-colors border border-amber-500/30 flex items-center gap-2 cursor-pointer"
+              >
+                <span>OPEN WHATSAPP AGAIN</span>
+              </a>
+
+              <button
+                onClick={() => { setIsSuccess(false); onClose(); }}
+                className="px-8 py-3 rounded-full bg-amber-500 text-slate-950 font-bold text-xs tracking-wider hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/20 cursor-pointer"
+              >
+                DONE & RETURN TO HOMEPAGE
+              </button>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-5">

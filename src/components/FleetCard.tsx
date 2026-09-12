@@ -61,20 +61,21 @@ export const FleetCard = ({ bike, onSelectBike }: FleetCardProps) => {
           </ul>
         </div>
 
-        <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+        <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-3 mt-auto">
           <div>
-            <span className="text-xs text-slate-400 block">Daily Rate</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-0.5">DAILY RATE</span>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-extrabold text-white font-heading">RM {bike.pricePerDay}</span>
-              <span className="text-xs text-slate-400">/ day</span>
+              <span className="text-2xl font-black text-white font-heading tracking-tight">RM {bike.pricePerDay}</span>
+              <span className="text-xs text-slate-500 font-medium">/ day</span>
             </div>
           </div>
 
           <button
+            id={`rent-bike-btn-${bike.id}`}
             onClick={() => onSelectBike(bike)}
-            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-white font-semibold text-xs transition-all duration-200 flex items-center gap-2 group/btn border border-slate-700 hover:border-amber-500"
+            className="whitespace-nowrap px-4 py-2.5 rounded-full bg-slate-900 hover:bg-amber-500 hover:text-slate-950 text-white font-extrabold text-xs uppercase tracking-wider transition-all duration-200 flex items-center gap-2 group/btn border border-slate-700 hover:border-amber-500 shadow-md cursor-pointer"
           >
-            <span>RENT THIS BIKE</span>
+            <span>RENT BIKE</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
           </button>
         </div>

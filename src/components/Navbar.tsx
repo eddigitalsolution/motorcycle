@@ -29,6 +29,9 @@ export const Navbar = ({ activeSection, setActiveSection, onOpenBookingModal }: 
   const handleNavClick = (id: string) => {
     setActiveSection(id);
     setMobileMenuOpen(false);
+    if (window.history.pushState) {
+      window.history.pushState(null, '', `#${id}`);
+    }
     const element = document.getElementById(id);
     if (element) {
       const headerOffset = 80;
@@ -51,7 +54,13 @@ export const Navbar = ({ activeSection, setActiveSection, onOpenBookingModal }: 
           
           <a 
             href="#" 
-            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onClick={(e) => { 
+              e.preventDefault(); 
+              window.scrollTo({ top: 0, behavior: 'smooth' }); 
+              if (window.history.pushState) {
+                window.history.pushState(null, '', window.location.pathname);
+              }
+            }}
             className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg p-1"
           >
             <div className="w-10 h-10 rounded-xl bg-linear-to-tr from-amber-600 to-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300">
@@ -71,11 +80,12 @@ export const Navbar = ({ activeSection, setActiveSection, onOpenBookingModal }: 
             {navLinks.map((link) => (
               <button
                 key={link.id}
+                id={`nav-link-${link.id}`}
                 onClick={() => handleNavClick(link.id)}
-                className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 ${
+                className={`whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold tracking-wider transition-all duration-200 cursor-pointer outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 ${
                   activeSection === link.id
                     ? 'text-amber-400 bg-amber-500/10 border border-amber-500/30 shadow-inner'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60 border border-transparent'
                 }`}
               >
                 {link.label}
@@ -85,17 +95,19 @@ export const Navbar = ({ activeSection, setActiveSection, onOpenBookingModal }: 
 
           <div className="flex items-center gap-3">
             <button
+              id="navbar-reserve-now-btn"
               onClick={onOpenBookingModal}
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs tracking-wider transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:-translate-y-0.5 active:translate-y-0"
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs tracking-wider transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
               <span>RESERVE NOW</span>
               <ChevronRight className="w-4 h-4" />
             </button>
 
             <button
+              id="mobile-menu-toggle-btn"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Navigation"
-              className="md:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              className="md:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
             >
               {mobileMenuOpen ? <X className="w-6 h-6 text-amber-400" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -110,10 +122,10 @@ export const Navbar = ({ activeSection, setActiveSection, onOpenBookingModal }: 
               <button
                 key={link.id}
                 onClick={() => handleNavClick(link.id)}
-                className={`text-left px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-colors ${
+                className={`text-left px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-colors outline-none focus:outline-none ${
                   activeSection === link.id
                     ? 'text-amber-400 bg-amber-500/10 border border-amber-500/30'
-                    : 'text-slate-300 hover:bg-slate-900'
+                    : 'text-slate-300 hover:bg-slate-900 border border-transparent'
                 }`}
               >
                 {link.label}

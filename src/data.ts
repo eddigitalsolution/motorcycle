@@ -10,7 +10,7 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     distance: '0 - 25 KM',
     terrain: 'Metropolis Grid',
     recommendedBikeId: 'triumph-street-triple',
-    bgImage: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2000&q=85',
+    bgImage: '/assets/bikes/triumph-street-triple.jpg',
     audioTone: 'Urban Pulse'
   },
   {
@@ -22,7 +22,7 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     distance: '25 - 180 KM',
     terrain: 'Multi-lane Freeway',
     recommendedBikeId: 'ducati-panigale-v4',
-    bgImage: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=2000&q=85',
+    bgImage: '/assets/bikes/ducati-panigale-v4-s.jpg',
     audioTone: 'High RPM Scream'
   },
   {
@@ -34,7 +34,7 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     distance: '180 - 340 KM',
     terrain: 'Alpine Passes',
     recommendedBikeId: 'bmw-r1250-gs',
-    bgImage: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85',
+    bgImage: '/assets/bikes/bmw-r1250-gs-adventure.jpg',
     audioTone: 'Boxer Twin Roar'
   },
   {
@@ -46,7 +46,7 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     distance: '340 - 480 KM',
     terrain: 'Coastal Highway 1',
     recommendedBikeId: 'yamaha-r1m',
-    bgImage: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85',
+    bgImage: '/assets/bikes/yamaha-yzf-r1m-carbon.jpg',
     audioTone: 'Crossplane Symphony'
   },
   {
@@ -58,7 +58,7 @@ export const JOURNEY_STAGES: JourneyStage[] = [
     distance: '480 - 600 KM',
     terrain: 'Golden Boulevard',
     recommendedBikeId: 'harley-fatboy',
-    bgImage: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=2000&q=85',
+    bgImage: '/assets/bikes/harley-fatboy.jpg',
     audioTone: 'V-Twin Thump'
   }
 ];
@@ -74,7 +74,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     topSpeed: '299+ km/h',
     pricePerDay: 780,
     badge: 'Most Popular',
-    image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1200&q=80',
+    image: '/assets/bikes/ducati-panigale-v4-s.jpg',
     features: ['Desmosedici Stradale V4', 'Ohlins Electronic Suspension', 'Cornering ABS EVO', 'Quickshifter Up/Down'],
     specs: {
       transmission: '6-Speed with DQS',
@@ -93,7 +93,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     topSpeed: '215 km/h',
     pricePerDay: 620,
     badge: 'Touring King',
-    image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80',
+    image: '/assets/bikes/bmw-r1250-gs-adventure.jpg',
     features: ['ShiftCam Technology', 'Dynamic ESA', 'Full Aluminum Panniers', '7-inch TFT Display'],
     specs: {
       transmission: '6-Speed Shaft Drive',
@@ -112,7 +112,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     topSpeed: '298 km/h',
     pricePerDay: 720,
     badge: 'Track Beast',
-    image: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=1200&q=80',
+    image: '/assets/bikes/yamaha-yzf-r1m-carbon.jpg',
     features: ['Crossplane CP4 Engine', 'Ohlins ERS Suspension', 'Carbon Fiber Bodywork', 'Telemetry System'],
     specs: {
       transmission: '6-Speed Constant Mesh',
@@ -130,7 +130,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     hp: 200,
     topSpeed: '280 km/h',
     pricePerDay: 580,
-    image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1200&q=80',
+    image: '/assets/bikes/kawasaki-zh2.jpg',
     features: ['Balanced Supercharged Engine', 'IMU 6-Axis Electronics', 'KTRC Traction Control', 'Brembo Stylema Callipers'],
     specs: {
       transmission: '6-Speed Assist & Slipper',
@@ -149,7 +149,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     topSpeed: '175 km/h',
     pricePerDay: 550,
     badge: 'Classic Icon',
-    image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1200&q=80',
+    image: '/assets/bikes/harley-fatboy.jpg',
     features: ['Milwaukee-Eight 114 V-Twin', 'Lakester Cast Solid Wheels', 'Signature LED Headlamp', 'Chrome Detailing'],
     specs: {
       transmission: '6-Speed Cruise Drive',
@@ -167,7 +167,7 @@ export const MOTORCYCLES: Motorcycle[] = [
     hp: 130,
     topSpeed: '245 km/h',
     pricePerDay: 480,
-    image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1200&q=80',
+    image: '/assets/bikes/triumph-street-triple.jpg',
     features: ['Moto2 Derived Triple Engine', 'Brembo Stylema Brakes', 'Cornering ABS & Traction Control', 'TFT Instrument Screen'],
     specs: {
       transmission: '6-Speed Triumph Shift Assist',
